@@ -1,0 +1,794 @@
+basePath: /api/v1
+definitions:
+  controllers.Customer:
+    properties:
+      address:
+        type: string
+      customerName:
+        type: string
+      gender:
+        type: integer
+      personal:
+        type: integer
+      phoneNumber:
+        type: string
+      title:
+        type: integer
+    type: object
+  ent.Customer:
+    properties:
+      Address:
+        description: Address holds the value of the "Address" field.
+        type: string
+      CustomerName:
+        description: CustomerName holds the value of the "CustomerName" field.
+        type: string
+      PhoneNumber:
+        description: PhoneNumber holds the value of the "PhoneNumber" field.
+        type: string
+      edges:
+        $ref: '#/definitions/ent.CustomerEdges'
+        description: |-
+          Edges holds the relations/edges for other nodes in the graph.
+          The values are being populated by the CustomerQuery when eager-loading is set.
+        type: object
+      gender_ID:
+        type: integer
+      id:
+        description: ID of the ent.
+        type: integer
+      personal_ID:
+        type: integer
+      title_ID:
+        type: integer
+    type: object
+  ent.CustomerEdges:
+    properties:
+      genders:
+        $ref: '#/definitions/ent.Gender'
+        description: Genders holds the value of the genders edge.
+        type: object
+      personals:
+        $ref: '#/definitions/ent.Personal'
+        description: Personals holds the value of the personals edge.
+        type: object
+      titles:
+        $ref: '#/definitions/ent.Title'
+        description: Titles holds the value of the titles edge.
+        type: object
+    type: object
+  ent.Gender:
+    properties:
+      GenderName:
+        description: GenderName holds the value of the "GenderName" field.
+        type: string
+      edges:
+        $ref: '#/definitions/ent.GenderEdges'
+        description: |-
+          Edges holds the relations/edges for other nodes in the graph.
+          The values are being populated by the GenderQuery when eager-loading is set.
+        type: object
+      id:
+        description: ID of the ent.
+        type: integer
+    type: object
+  ent.GenderEdges:
+    properties:
+      customers:
+        description: Customers holds the value of the customers edge.
+        items:
+          $ref: '#/definitions/ent.Customer'
+        type: array
+    type: object
+  ent.Personal:
+    properties:
+      Email:
+        description: Email holds the value of the "Email" field.
+        type: string
+      Name:
+        description: Name holds the value of the "Name" field.
+        type: string
+      Password:
+        description: Password holds the value of the "Password" field.
+        type: string
+      edges:
+        $ref: '#/definitions/ent.PersonalEdges'
+        description: |-
+          Edges holds the relations/edges for other nodes in the graph.
+          The values are being populated by the PersonalQuery when eager-loading is set.
+        type: object
+      id:
+        description: ID of the ent.
+        type: integer
+    type: object
+  ent.PersonalEdges:
+    properties:
+      customers:
+        description: Customers holds the value of the customers edge.
+        items:
+          $ref: '#/definitions/ent.Customer'
+        type: array
+    type: object
+  ent.Title:
+    properties:
+      TitleName:
+        description: TitleName holds the value of the "TitleName" field.
+        type: string
+      edges:
+        $ref: '#/definitions/ent.TitleEdges'
+        description: |-
+          Edges holds the relations/edges for other nodes in the graph.
+          The values are being populated by the TitleQuery when eager-loading is set.
+        type: object
+      id:
+        description: ID of the ent.
+        type: integer
+    type: object
+  ent.TitleEdges:
+    properties:
+      customers:
+        description: Customers holds the value of the customers edge.
+        items:
+          $ref: '#/definitions/ent.Customer'
+        type: array
+    type: object
+  gin.H:
+    additionalProperties: true
+    type: object
+host: localhost:8080
+info:
+  contact:
+    email: support@swagger.io
+    name: API Support
+    url: http://www.swagger.io/support
+  description: This is a sample server for SUT SE 2563
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  termsOfService: http://swagger.io/terms/
+  title: SUT SA Example API
+  version: "1.0"
+paths:
+  /customers:
+    get:
+      description: list customer entities
+      operationId: list-customer
+      parameters:
+      - description: Limit
+        in: query
+        name: limit
+        type: integer
+      - description: Offset
+        in: query
+        name: offset
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/ent.Customer'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/gin.H'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/gin.H'
+      summary: List customer entities
+    post:
+      consumes:
+      - application/json
+      description: Create customer
+      operationId: create-customer
+      parameters:
+      - description: 'Customer '
+        in: body
+        name: customer
+        required: true
+        schema:
+          $ref: '#/definitions/controllers.Customer'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/controllers.Customer'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/gin.H'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/gin.H'
+      summary: Create customer
+  /customers/{id}:
+    delete:
+      description: get customer by ID
+      operationId: delete-customer
+      parameters:
+      - description: Customer ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/gin.H'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/gin.H'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/gin.H'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/gin.H'
+      summary: Delete a customer entity by ID
+    get:
+      description: get customer by ID
+      operationId: get-customer
+      parameters:
+      - description: Customer ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/ent.Customer'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/gin.H'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/gin.H'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/gin.H'
+      summary: Get a customer entity by ID
+    put:
+      consumes:
+      - application/json
+      description: update customer by ID
+      operationId: update-customer
+      parameters:
+      - description: Customer ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Customer entity
+        in: body
+        name: customer
+        required: true
+        schema:
+          $ref: '#/definitions/ent.Customer'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/ent.Customer'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/gin.H'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/gin.H'
+      summary: Update a customer entity by ID
+  /genders:
+    get:
+      description: list gender entities
+      operationId: list-gender
+      parameters:
+      - description: Limit
+        in: query
+        name: limit
+        type: integer
+      - description: Offset
+        in: query
+        name: offset
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/ent.Gender'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/gin.H'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/gin.H'
+      summary: List gender entities
+    post:
+      consumes:
+      - application/json
+      description: Create gender
+      operationId: create-gender
+      parameters:
+      - description: Gender entity
+        in: body
+        name: gender
+        required: true
+        schema:
+          $ref: '#/definitions/ent.Gender'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/ent.Gender'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/gin.H'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/gin.H'
+      summary: Create gender
+  /genders/{id}:
+    delete:
+      description: get gender by ID
+      operationId: delete-gender
+      parameters:
+      - description: Gender ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/gin.H'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/gin.H'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/gin.H'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/gin.H'
+      summary: Delete a gender entity by ID
+    get:
+      description: get gender by ID
+      operationId: get-gender
+      parameters:
+      - description: Gender ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/ent.Gender'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/gin.H'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/gin.H'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/gin.H'
+      summary: Get a gender entity by ID
+    put:
+      consumes:
+      - application/json
+      description: update gender by ID
+      operationId: update-gender
+      parameters:
+      - description: Gender ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Gender entity
+        in: body
+        name: gender
+        required: true
+        schema:
+          $ref: '#/definitions/ent.Gender'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/ent.Gender'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/gin.H'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/gin.H'
+      summary: Update a gender entity by ID
+  /personals:
+    get:
+      description: list personal entities
+      operationId: list-personal
+      parameters:
+      - description: Limit
+        in: query
+        name: limit
+        type: integer
+      - description: Offset
+        in: query
+        name: offset
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/ent.Personal'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/gin.H'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/gin.H'
+      summary: List personal entities
+    post:
+      consumes:
+      - application/json
+      description: Create personal
+      operationId: create-personal
+      parameters:
+      - description: Personal entity
+        in: body
+        name: personal
+        required: true
+        schema:
+          $ref: '#/definitions/ent.Personal'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/ent.Personal'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/gin.H'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/gin.H'
+      summary: Create personal
+  /personals/{id}:
+    delete:
+      description: get personal by ID
+      operationId: delete-personal
+      parameters:
+      - description: Personal ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/gin.H'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/gin.H'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/gin.H'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/gin.H'
+      summary: Delete a personal entity by ID
+    get:
+      description: get personal by ID
+      operationId: get-personal
+      parameters:
+      - description: Personal ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/ent.Personal'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/gin.H'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/gin.H'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/gin.H'
+      summary: Get a personal entity by ID
+    put:
+      consumes:
+      - application/json
+      description: update personal by ID
+      operationId: update-personal
+      parameters:
+      - description: Personal ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Personal entity
+        in: body
+        name: personal
+        required: true
+        schema:
+          $ref: '#/definitions/ent.Personal'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/ent.Personal'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/gin.H'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/gin.H'
+      summary: Update a personal entity by ID
+  /titles:
+    get:
+      description: list title entities
+      operationId: list-title
+      parameters:
+      - description: Limit
+        in: query
+        name: limit
+        type: integer
+      - description: Offset
+        in: query
+        name: offset
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/ent.Title'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/gin.H'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/gin.H'
+      summary: List title entities
+    post:
+      consumes:
+      - application/json
+      description: Create title
+      operationId: create-title
+      parameters:
+      - description: Title entity
+        in: body
+        name: title
+        required: true
+        schema:
+          $ref: '#/definitions/ent.Title'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/ent.Title'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/gin.H'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/gin.H'
+      summary: Create title
+  /titles/{id}:
+    delete:
+      description: get title by ID
+      operationId: delete-title
+      parameters:
+      - description: Title ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/gin.H'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/gin.H'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/gin.H'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/gin.H'
+      summary: Delete a title entity by ID
+    get:
+      description: get title by ID
+      operationId: get-title
+      parameters:
+      - description: Title ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/ent.Title'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/gin.H'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/gin.H'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/gin.H'
+      summary: Get a title entity by ID
+    put:
+      consumes:
+      - application/json
+      description: update title by ID
+      operationId: update-title
+      parameters:
+      - description: Title ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Title entity
+        in: body
+        name: title
+        required: true
+        schema:
+          $ref: '#/definitions/ent.Title'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/ent.Title'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/gin.H'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/gin.H'
+      summary: Update a title entity by ID
+securityDefinitions:
+  ApiKeyAuth:
+    in: header
+    name: Authorization
+    type: apiKey
+  BasicAuth:
+    type: basic
+  OAuth2AccessCode:
+    authorizationUrl: https://example.com/oauth/authorize
+    flow: accessCode
+    scopes:
+      admin: ' Grants read and write access to administrative information'
+    tokenUrl: https://example.com/oauth/token
+    type: oauth2
+  OAuth2Application:
+    authorizationUrl: ""
+    flow: application
+    scopes:
+      admin: ' Grants read and write access to administrative information'
+      write: ' Grants write access'
+    tokenUrl: https://example.com/oauth/token
+    type: oauth2
+  OAuth2Implicit:
+    authorizationUrl: https://example.com/oauth/authorize
+    flow: implicit
+    scopes:
+      admin: ' Grants read and write access to administrative information'
+      write: ' Grants write access'
+    type: oauth2
+  OAuth2Password:
+    authorizationUrl: ""
+    flow: password
+    scopes:
+      admin: ' Grants read and write access to administrative information'
+      read: ' Grants read access'
+      write: ' Grants write access'
+    tokenUrl: https://example.com/oauth/token
+    type: oauth2
+swagger: "2.0"
